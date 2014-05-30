@@ -1,4 +1,5 @@
 MEAN-Skeleton
 =============
 
-simple MEAN skeleton <a href='http://mean.nodejitsu.com/'>Demo</a>
+simple MEAN skeleton<br />
+<a href='http://mean.nodejitsu.com/'>Demo</a>
