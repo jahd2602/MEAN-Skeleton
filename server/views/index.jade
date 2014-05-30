@@ -1,0 +1,17 @@
+extends ../includes/layout
+
+block main-content
+	section
+		div(ng-controller='MainCtrl')
+			div.col-md-2
+				img(src='assets/mean.png')
+			h1.jumbotron 
+				a(href='/') Main
+				b  
+				a(href='#/view') View
+				div(ng-view)
+			h2=mongoMessage
+				
+			
+
+		
