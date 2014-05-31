@@ -1,10 +1,10 @@
 {
   "name": "Nero",
-  "version": "0.0.0",
+  "version": "0.0.0-11",
   "authors": [
     "Andrew D'Amelio <dev@andrewdamel.io>"
   ],
-  "description": "Dev Training",
+  "description": "Mean Skeleton",
   "moduleType": [
     "node"
   ],
