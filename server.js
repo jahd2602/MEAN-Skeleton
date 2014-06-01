@@ -23,11 +23,6 @@ db.once('open', function callback() {
 	console.log('MongoDB Online!');
 })
 var Message = mongoose.model('Message', messageSchema);
-Message.findOne(function (err, msg) {
-  if (err) return console.error(err);
-  mongoMessage = msg.message;
-});
-
 
 // JSON API
 app.get('/api', function(req, res){
@@ -53,9 +48,7 @@ app.post('/api', function(req, res){
 
 // catch-all GET - defer routing to angular
 app.get('*', function(req, res) {
-	res.render('index', {
-		mongoMessage: mongoMessage
-	});
+	res.render('index', {});
 });
 
 // GO GO GO
