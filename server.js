@@ -14,7 +14,6 @@ app.use(morgan())
 morgan({ format: 'dev', immediate: true })
 app.use(express.static(__dirname + '/public'));
 
-
 // MongoDB setup
 mongoose.connect('mongodb://test:test@ds053188.mongolab.com:53188/hello');
 var db = mongoose.connection;
@@ -27,16 +26,31 @@ var Message = mongoose.model('Message', messageSchema);
 Message.findOne(function (err, msg) {
   if (err) return console.error(err);
   mongoMessage = msg.message;
-  mongo = msg;
   console.log("db message: "+msg.message);
 });
 
 
 // Routes
 app.get('/api', function(req, res){
-    res.send(mongo);
+	Message.find(function (err, msg) {
+			mongo = msg;
+			res.json(mongo);
+	});
 });
 
+app.post('/api', function(req, res){
+	var message = new Message({
+		message : req.body.message
+	});	
+	message.save(function (err) {
+		if (!err) {
+			console.log("added " +message);
+		} else {
+			console.log(err);
+		}
+	});
+	res.json(message);
+});
 
 app.get('*', function(req, res) {
 	res.render('index', {
