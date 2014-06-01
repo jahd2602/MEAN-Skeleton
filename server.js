@@ -26,14 +26,15 @@ db.once('open', function callback() {
 var Message = mongoose.model('Message', messageSchema);
 Message.findOne(function (err, msg) {
   if (err) return console.error(err);
-  mongoMessage = msg.message
+  mongoMessage = msg.message;
+  mongo = msg;
   console.log("db message: "+msg.message);
 });
 
 
 // Routes
 app.get('/api', function(req, res){
-    res.send([{"name":"Nero", "age":"1"}, {"name":"Dexter", "age":"7"}]);
+    res.send(mongo);
 });
 
 

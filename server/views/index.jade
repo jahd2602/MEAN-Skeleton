@@ -7,11 +7,9 @@ block main-content
 				img(src='assets/mean.png')
 			h1.jumbotron 
 				a(href='/') Main
-				b  
+				| &nbsp;
 				a(href='#/view') View
 				div(ng-view)
-			h2=mongoMessage
-				
-			
-
-		
+			h3=mongoMessage 
+				br
+				a(href='/api') API
