@@ -21,13 +21,9 @@ app.factory('Mongo', function($http, $q) {
 	};
 
 	var push = function(params) {
-		$http.post('/api', params).
-		success(function() {
-			console.log('SAVED: ' + params.message);
-		})
-		.error(function() {
-			console.log('db save error');
-		});
+		var dd = $q.defer();
+		$http.post('/api', params).success(dd.resolve).error(dd.reject);
+		return dd.promise;
 	};
 	
 	return {
@@ -41,17 +37,21 @@ app.controller('MainCtrl', ['$scope','Mongo', function ($scope, Mongo) {
 	Mongo.query().then(function (result) {
 		$scope.db = (result !== 'null') ? result[0].message : {};
 	}, function (reason) {
-		console.log('ERROR', reason);
+		console.log('ERROR:', reason);
 	});
 
 }]);
 
 app.controller('ViewCtrl',['$scope', 'Mongo', function($scope, Mongo){
 	$scope.save = function() {
-		var params = {message: $scope.test};
 		if ($scope.test) {
+			var params = {message: $scope.test};
 			$scope.test='';
-			Mongo.push(params);
-		}
+			Mongo.push(params).then(function(results) {
+				console.log('SAVED:', results.message);
+			}, function (reason) {
+				console.log('ERROR:', reason);
+			});
+		};
 	};
 }]);
