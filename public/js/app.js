@@ -18,9 +18,9 @@ app.factory('Mongo', function($http, $q) {
 		var deferred = $q.defer();
 		$http({method: 'get', url: '/api'}).success(deferred.resolve).error(deferred.reject);
 		return deferred.promise;
-    };
+	};
 
-    var push = function(params) {
+	var push = function(params) {
 		$http.post('/api', params).
 		success(function() {
 			console.log('SAVED: ' + params.message);
@@ -30,10 +30,10 @@ app.factory('Mongo', function($http, $q) {
 		});
 	};
 	
-    return {
-      query : query,
-      push : push
-    };
+	return {
+		query : query,
+		push : push
+	};
 });
 
 app.controller('MainCtrl', ['$scope','Mongo', function ($scope, Mongo) {
