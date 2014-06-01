@@ -13,25 +13,27 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
 }]);
 
 app.factory('Mongo', function($http, $q) {
-	var db = '';
-    var query = function() {
+
+	var query = function() {
 		var deferred = $q.defer();
 		$http({method: 'get', url: '/api'}).success(deferred.resolve).error(deferred.reject);
 		return deferred.promise;
-    }
+    };
+
     var push = function(params) {
 		$http.post('/api', params).
 		success(function() {
-			console.log("SAVED: " + params.message);
+			console.log('SAVED: ' + params.message);
 		})
 		.error(function() {
-			console.log("db save error");
+			console.log('db save error');
 		});
-	}
+	};
+	
     return {
       query : query,
       push : push
-    }
+    };
 });
 
 app.controller('MainCtrl', ['$scope','Mongo', function ($scope, Mongo) {

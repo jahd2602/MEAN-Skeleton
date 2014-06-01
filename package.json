@@ -1,6 +1,6 @@
 {
   "name": "meanit",
-  "version": "0.0.0-16",
+  "version": "0.0.0-17",
   "description": "simple MEAN stack skeleton",
   "main": "server.js",
   "scripts": {
@@ -13,7 +13,6 @@
     "type": "git",
     "url": "https://github.com/andrewdamelio/MEAN-Skeleton"
   },
-  "homepage": "http://mean.nodejitsu.com/",
   "bugs": "https://github.com/andrewdamelio/MEAN-Skeleton/issues",
   "dependencies": {
     "express": "^4.3.2",
