@@ -20,17 +20,16 @@ var db = mongoose.connection;
 var messageSchema = mongoose.Schema({message: String});
 db.on('error', console.error.bind(console, 'connection error....'));
 db.once('open', function callback() {
-	console.log('nero db opened');
+	console.log('MongoDB Online!');
 })
 var Message = mongoose.model('Message', messageSchema);
 Message.findOne(function (err, msg) {
   if (err) return console.error(err);
   mongoMessage = msg.message;
-  console.log("db message: "+msg.message);
 });
 
 
-// Routes
+// JSON API
 app.get('/api', function(req, res){
 	Message.find(function (err, msg) {
 			mongo = msg;
@@ -52,15 +51,14 @@ app.post('/api', function(req, res){
 	res.json(message);
 });
 
+// catch-all GET - defer routing to angular
 app.get('*', function(req, res) {
 	res.render('index', {
 		mongoMessage: mongoMessage
 	});
 });
 
-
 // GO GO GO
 var port = process.env.PORT || 3030;
 app.listen(port);
 console.log("Listening on port " + port + "...");
-
