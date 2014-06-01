@@ -15,15 +15,15 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
 app.factory('Mongo', function($http, $q) {
 
 	var query = function() {
-		var deferred = $q.defer();
-		$http({method: 'get', url: '/api'}).success(deferred.resolve).error(deferred.reject);
-		return deferred.promise;
+		var deferredQuery = $q.defer();
+		$http({method: 'get', url: '/api'}).success(deferredQuery.resolve).error(deferredQuery.reject);
+		return deferredQuery.promise;
 	};
 
 	var push = function(params) {
-		var dd = $q.defer();
-		$http.post('/api', params).success(dd.resolve).error(dd.reject);
-		return dd.promise;
+		var deferredPush = $q.defer();
+		$http.post('/api', params).success(deferredPush.resolve).error(deferredPush.reject);
+		return deferredPush.promise;
 	};
 	
 	return {
@@ -52,6 +52,6 @@ app.controller('ViewCtrl',['$scope', 'Mongo', function($scope, Mongo){
 			}, function (reason) {
 				console.log('ERROR:', reason);
 			});
-		};
+		}
 	};
 }]);
