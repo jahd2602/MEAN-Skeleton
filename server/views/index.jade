@@ -5,11 +5,13 @@ block main-content
 		div(ng-controller='MainCtrl')
 			div.col-md-2
 				img(src='assets/mean.png')
-			h1.jumbotron 
+			h2.jumbotron 
 				a(href='/') Main
-				| &nbsp;
+				| &nbsp;|&nbsp;
+				a(href='#/add') Add
+				| &nbsp;|&nbsp;
 				a(href='#/view') View
 				div(ng-view)
 			h3
 				| &nbsp;
-				a(href='/api') API
+				a(href='/api') JSON API

@@ -10,6 +10,10 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
 			templateUrl: '/partials/main.html', 
 			controller:  'MainCtrl'	
 		})
+		.when('/add', {
+			templateUrl: '/partials/add.html', 
+			controller:  'AddCtrl'	
+		})		
 		.when('/view', {
 			templateUrl: '/partials/view.html', 
 			controller:  'ViewCtrl'	
@@ -33,33 +37,63 @@ app.factory('Mongo', function($http, $q) {
 		$http.post('/api', params).success(deferredPush.resolve).error(deferredPush.reject);
 		return deferredPush.promise;
 	};
+
+	var remove = function(id) {
+		var deferredRemove = $q.defer();
+        var url = '/api/' + id;
+        $http.delete(url).success(deferredRemove.resolve).error(deferredRemove.reject);
+
+        return deferredRemove.promise;
+	};
 	
 	return {
 		query : query,
-		push : push
+		push : push,
+		remove : remove
 	};
 });
 
 app.controller('MainCtrl', ['$scope','Mongo', function ($scope, Mongo) {
 	$scope.myVar = 'angular is working!';
-	Mongo.query().then(function (result) {
-		$scope.db = (result !== 'null') ? result[0].message : {};
-	}, function (reason) {
-		console.log('ERROR:', reason);
-	});
 
+	$scope.query = function() {
+		Mongo.query().then(function (result) {
+			$scope.message = (result !== 'null') ? result[0].message : {};
+			$scope.items = (result !== 'null') ? result : {};
+		}, function (reason) {
+			console.log('ERROR:', reason);
+		});
+	};
+
+	$scope.query();
 }]);
 
-app.controller('ViewCtrl',['$scope', 'Mongo', function($scope, Mongo){
+app.controller('AddCtrl',['$scope', 'Mongo', function($scope, Mongo){
+	$scope.uploaded = false;
+
 	$scope.save = function() {
 		if ($scope.test) {
 			var params = {message: $scope.test};
 			$scope.test='';
 			Mongo.push(params).then(function(results) {
+				$scope.uploaded = true;
+				$scope.query();
 				console.log('SAVED:', results.message);
 			}, function (reason) {
 				console.log('ERROR:', reason);
 			});
 		}
+	};
+}]);
+
+app.controller('ViewCtrl',['$scope', 'Mongo', function($scope, Mongo){
+  	$scope.remove = function(index) {
+		var id = $scope.items[index]._id;
+		Mongo.remove(id).then(function(results) {
+			$scope.query();
+			console.log('DELETED:', results);
+		}, function (reason) {
+			console.log('ERROR:', reason);
+		});
 	};
 }]);

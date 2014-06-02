@@ -25,6 +25,13 @@ db.once('open', function callback() {
 var Message = mongoose.model('Message', messageSchema);
 
 // JSON API
+app.get('/api/:id', function(req, res){
+	Message.find({ _id: req.params.id }, function (err, msg) {
+			mongo = msg;
+			res.json(mongo);
+	});
+});
+
 app.get('/api', function(req, res){
 	Message.find(function (err, msg) {
 			mongo = msg;
@@ -38,12 +45,19 @@ app.post('/api', function(req, res){
 	});	
 	message.save(function (err) {
 		if (!err) {
-			console.log("added " +message);
-		} else {
-			console.log(err);
+			console.log("added " + message);
 		}
 	});
 	res.json(message);
+});
+
+app.delete('/api/:id', function(req, res) {
+	Message.remove({ _id: req.params.id }, function(err) {
+    	if (!err) {
+            console.log("deleted "+ req.params.id);
+    	}
+	});
+	res.json({'_id': req.params.id});
 });
 
 // catch-all GET - defer routing to angular
