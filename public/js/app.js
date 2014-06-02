@@ -65,6 +65,7 @@ app.controller('MainCtrl', ['$scope','Mongo', function ($scope, Mongo) {
 	};
 
 	$scope.query();
+	
 }]);
 
 app.controller('AddCtrl',['$scope', 'Mongo', function($scope, Mongo){
@@ -76,8 +77,8 @@ app.controller('AddCtrl',['$scope', 'Mongo', function($scope, Mongo){
 			$scope.test='';
 			Mongo.push(params).then(function(results) {
 				$scope.uploaded = true;
+				console.log('SAVED:', results);
 				$scope.query();
-				console.log('SAVED:', results.message);
 			}, function (reason) {
 				console.log('ERROR:', reason);
 			});
@@ -86,11 +87,13 @@ app.controller('AddCtrl',['$scope', 'Mongo', function($scope, Mongo){
 }]);
 
 app.controller('ViewCtrl',['$scope', 'Mongo', function($scope, Mongo){
+	$scope.test =$scope.items; 
   	$scope.remove = function(index) {
 		var id = $scope.items[index]._id;
+		$scope.test=''
 		Mongo.remove(id).then(function(results) {
-			$scope.query();
 			console.log('DELETED:', results);
+			$scope.query();
 		}, function (reason) {
 			console.log('ERROR:', reason);
 		});

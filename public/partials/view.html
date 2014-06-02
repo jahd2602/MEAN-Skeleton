@@ -2,7 +2,7 @@
 <br />
 <div class='output'>
 	<table class="table table-striped">
-		<tr ng-repeat='item in items track by $index'>
+		<tr ng-repeat='item in items'>
 			<td>{{item.message}}</td>
 			<td align='right'><div class='btn btn-danger' ng-click='remove($index)'><i class="fa fa-times"></i></div></td>
 		</tr>
