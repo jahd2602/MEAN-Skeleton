@@ -1,11 +1,11 @@
 {
-  "name": "Nero",
+  "name": "meanit",
   "version": "0.2.4",
   "description": "simple MEAN stack skeleton",
   "main": "server.js",
   "scripts": {
     "test": "gulp",
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "author": "Andrew D'Amelio <dev@andrewdamel.io>",
   "license": "MIT",
