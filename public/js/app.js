@@ -44,11 +44,19 @@ app.factory('Mongo', function($http, $q) {
 		$http.delete(url).success(deferredRemove.resolve).error(deferredRemove.reject);
 		return deferredRemove.promise;
 	};
+
+	var update = function(id, data) {
+		var deferredUpdate = $q.defer();
+		var url = '/api/' + id + '&' + data;
+		$http.put(url).success(deferredUpdate.resolve).error(deferredUpdate.reject);
+		return deferredUpdate.promise;
+	};
 	
 	return {
 		query : query,
 		push : push,
-		remove : remove
+		remove : remove,
+		update : update
 	};
 });
 
@@ -96,4 +104,49 @@ app.controller('ViewCtrl',['$scope', 'Mongo', function($scope, Mongo){
 			console.log('ERROR:', reason);
 		});
 	};
+
+
+}]);
+
+app.directive('editable',[function(){
+	var markup = "<div><label class='editInput' ng-if='!editMode'>{{editable.message}}</label><input type='text' ng-model='editable.message' ng-if='editMode'></input></div>";
+
+	return {
+		scope: {
+			editable : '='
+		},
+		template: markup,
+		restrict: 'A',
+		controller : function($scope, Mongo) {
+			$scope.editMode = false;
+
+			$scope.setEditMode = function() {
+				$scope.editMode =! $scope.editMode;
+			};
+
+			$scope.updateDb = function(id, data) {
+				Mongo.update(id, data).then(function(results) {
+					console.log('UPDDATED:', results);
+				}, function (reason) {
+					console.log('ERROR:', reason);
+				});
+			};
+		},
+		link: function(scope, element, attrs) {
+			element.on('dblclick', function() {
+				scope.$apply(function() {
+					scope.setEditMode();
+				});
+				scope.$apply(function() {
+					element.find('input').focus();
+				});
+			});
+			element.on('focusout', function() {
+				scope.$apply(function() {
+					scope.setEditMode();
+					scope.updateDb(scope.editable._id, scope.editable.message);
+				});
+			});
+		}
+  	};
 }]);

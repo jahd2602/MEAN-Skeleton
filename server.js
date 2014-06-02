@@ -1,7 +1,8 @@
 var express = require('express'),
  	morgan  = require('morgan'),
  	bodyParser = require('body-parser'),
- 	mongoose = require('mongoose'); 
+ 	mongoose = require('mongoose'),
+	colors = require('colors'); 
 
 
 var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
@@ -20,7 +21,7 @@ var db = mongoose.connection;
 var messageSchema = mongoose.Schema({message: String});
 db.on('error', console.error.bind(console, 'connection error....'));
 db.once('open', function callback() {
-	console.log('MongoDB Online!');
+	console.log('MongoDB Online!'.green);
 })
 var Message = mongoose.model('Message', messageSchema);
 
@@ -45,16 +46,31 @@ app.post('/api', function(req, res){
 	});	
 	message.save(function (err) {
 		if (!err) {
-			console.log("added " + message);
+			console.log("added ".green + message.toString().green);
 		}
 	});
 	res.json(message);
 });
 
+app.put('/api/:data', function(req, res){
+	var message = req.params.data.split("&");
+	Message.findOne({_id: message[0]}, function(err, user){
+		if (!err) { 
+			user.message =message[1];
+			console.log("updated ".green + user.toString().green);
+			user.save(function(err) {
+				if (!err) {
+					res.json({ 'message':message[1], '_id':message[0]});
+				}
+			});
+		}
+	});
+});
+
 app.delete('/api/:id', function(req, res) {
 	Message.remove({ _id: req.params.id }, function(err) {
     	if (!err) {
-            console.log("deleted "+ req.params.id);
+            console.log("deleted ".green+ req.params.id.green);
     	}
 	});
 	res.json({'_id': req.params.id});
@@ -68,4 +84,4 @@ app.get('*', function(req, res) {
 // GO GO GO
 var port = process.env.PORT || 3030;
 app.listen(port);
-console.log("Listening on port " + port + "...");
+console.log("Listening on port ".green + port);
