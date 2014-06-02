@@ -58,7 +58,6 @@ app.controller('MainCtrl', ['$scope','Mongo', function ($scope, Mongo) {
 
 	$scope.query = function() {
 		Mongo.query().then(function (result) {
-			$scope.message = (result !== 'null') ? result[0].message : {};
 			$scope.items = (result !== 'null') ? result : {};
 		}, function (reason) {
 			console.log('ERROR:', reason);
