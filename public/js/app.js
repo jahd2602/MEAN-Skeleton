@@ -40,10 +40,9 @@ app.factory('Mongo', function($http, $q) {
 
 	var remove = function(id) {
 		var deferredRemove = $q.defer();
-        var url = '/api/' + id;
-        $http.delete(url).success(deferredRemove.resolve).error(deferredRemove.reject);
-
-        return deferredRemove.promise;
+		var url = '/api/' + id;
+		$http.delete(url).success(deferredRemove.resolve).error(deferredRemove.reject);
+		return deferredRemove.promise;
 	};
 	
 	return {
@@ -88,9 +87,10 @@ app.controller('AddCtrl',['$scope', 'Mongo', function($scope, Mongo){
 
 app.controller('ViewCtrl',['$scope', 'Mongo', function($scope, Mongo){
 	$scope.test =$scope.items; 
+	
   	$scope.remove = function(index) {
 		var id = $scope.items[index]._id;
-		$scope.test=''
+		$scope.test='';
 		Mongo.remove(id).then(function(results) {
 			console.log('DELETED:', results);
 			$scope.query();
