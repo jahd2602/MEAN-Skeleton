@@ -83,9 +83,10 @@ app.controller('AddCtrl',['$scope', 'Mongo', function($scope, Mongo){
 			Mongo.push(params).then(function(results) {
 				$scope.uploaded = true;
 				$scope.items.push(results);
-				console.log('SAVED:', results);
+				toastr.clear();
+				toastr.success('ADDED: ' + results.message);
 			}, function (reason) {
-				console.log('ERROR:', reason);
+				toastr.error('ERROR:', reason);
 			});
 		}
 	};
@@ -94,16 +95,16 @@ app.controller('AddCtrl',['$scope', 'Mongo', function($scope, Mongo){
 app.controller('ViewCtrl',['$scope', 'Mongo', function($scope, Mongo){
 	$scope.remove = function(index) {
 		var id = $scope.items[index]._id;
+		var item = $scope.items[index].message;
 		$scope.test='';
 		$scope.items.splice(index, 1);
 		Mongo.remove(id).then(function(results) {
-			console.log('DELETED:', results);
+			toastr.clear();
+			toastr.success('DELETED: '+ item);
 		}, function (reason) {
-			console.log('ERROR:', reason);
+			toastr.error('ERROR:', reason);
 		});
 	};
-
-
 }]);
 
 app.directive('editable',[function(){
@@ -115,22 +116,24 @@ app.directive('editable',[function(){
 		},
 		template: markup,
 		restrict: 'A',
-		controller : function($scope, Mongo) {
+		controller : ['$scope', 'Mongo', function($scope, Mongo) {
 			$scope.editMode = false;
+			$scope.lastText = $scope.editable.message;
 
 			$scope.setEditMode = function() {
 				$scope.editMode =! $scope.editMode;
 			};
-
 			$scope.updateDb = function(id, data) {
 				var params = {message: data, id: id};
 				Mongo.update(params).then(function(results) {
-					console.log('UPDDATED:', results);
+					toastr.clear();
+					toastr.success('UPDATED: ' + $scope.lastText + ' to ' + $scope.editable.message);
+					$scope.lastText = $scope.editable.message;
 				}, function (reason) {
-					console.log('ERROR:', reason);
+					toastr.error('ERROR:', reason);
 				});
 			};
-		},
+		}],
 		link: function(scope, element, attrs) {
 			element.on('dblclick', function() {
 				scope.$apply(function() {
@@ -143,7 +146,9 @@ app.directive('editable',[function(){
 			element.on('focusout', function() {
 				scope.$apply(function() {
 					scope.setEditMode();
-					scope.updateDb(scope.editable._id, scope.editable.message);
+					if (scope.lastText !== scope.editable.message) {
+						scope.updateDb(scope.editable._id, scope.editable.message);
+					}
 				});
 			});
 		}
