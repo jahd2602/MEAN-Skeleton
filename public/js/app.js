@@ -40,15 +40,13 @@ app.factory('Mongo', function($http, $q) {
 
 	var remove = function(id) {
 		var deferredRemove = $q.defer();
-		var url = '/api/' + id;
-		$http.delete(url).success(deferredRemove.resolve).error(deferredRemove.reject);
+		$http.delete('/api/' + id).success(deferredRemove.resolve).error(deferredRemove.reject);
 		return deferredRemove.promise;
 	};
 
-	var update = function(id, data) {
+	var update = function(params) {
 		var deferredUpdate = $q.defer();
-		var url = '/api/' + id + '&' + data;
-		$http.put(url).success(deferredUpdate.resolve).error(deferredUpdate.reject);
+		$http.put('/api/'+params.id, params).success(deferredUpdate.resolve).error(deferredUpdate.reject);
 		return deferredUpdate.promise;
 	};
 	
@@ -125,7 +123,8 @@ app.directive('editable',[function(){
 			};
 
 			$scope.updateDb = function(id, data) {
-				Mongo.update(id, data).then(function(results) {
+				var params = {message: data, id: id};
+				Mongo.update(params).then(function(results) {
 					console.log('UPDDATED:', results);
 				}, function (reason) {
 					console.log('ERROR:', reason);

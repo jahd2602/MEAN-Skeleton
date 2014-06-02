@@ -52,15 +52,14 @@ app.post('/api', function(req, res){
 	res.json(message);
 });
 
-app.put('/api/:data', function(req, res){
-	var message = req.params.data.split("&");
-	Message.findOne({_id: message[0]}, function(err, user){
+app.put('/api/:id', function(req, res){
+	Message.findOne({_id: req.params.id}, function(err, user){
 		if (!err) { 
-			user.message =message[1];
+			user.message = req.body.message;
 			console.log("updated ".green + user.toString().green);
 			user.save(function(err) {
 				if (!err) {
-					res.json({ 'message':message[1], '_id':message[0]});
+					res.json(req.body);
 				}
 			});
 		}
