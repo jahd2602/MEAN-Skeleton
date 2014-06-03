@@ -32,10 +32,10 @@ app.factory('Mongo', function($http, $q) {
 		return deferredQuery.promise;
 	};
 
-	var push = function(params) {
-		var deferredPush = $q.defer();
-		$http.post('/api', params).success(deferredPush.resolve).error(deferredPush.reject);
-		return deferredPush.promise;
+	var save = function(params) {
+		var deferredSave = $q.defer();
+		$http.post('/api', params).success(deferredSave.resolve).error(deferredSave.reject);
+		return deferredSave.promise;
 	};
 
 	var remove = function(id) {
@@ -52,7 +52,7 @@ app.factory('Mongo', function($http, $q) {
 	
 	return {
 		query : query,
-		push : push,
+		save : save,
 		remove : remove,
 		update : update
 	};
@@ -80,10 +80,9 @@ app.controller('AddCtrl',['$scope', 'Mongo', function($scope, Mongo){
 		if ($scope.test) {
 			var params = {message: $scope.test};
 			$scope.test='';
-			Mongo.push(params).then(function(results) {
+			Mongo.save(params).then(function(results) {
 				$scope.uploaded = true;
 				$scope.items.push(results);
-				toastr.clear();
 				toastr.success('ADDED: ' + results.message);
 			}, function (reason) {
 				toastr.error('ERROR:', reason);
@@ -96,24 +95,28 @@ app.controller('ViewCtrl',['$scope', 'Mongo', function($scope, Mongo){
 	$scope.remove = function(index) {
 		var id = $scope.items[index]._id;
 		var item = $scope.items[index].message;
-		$scope.test='';
 		$scope.items.splice(index, 1);
 		Mongo.remove(id).then(function(results) {
-			toastr.clear();
 			toastr.success('DELETED: '+ item);
 		}, function (reason) {
 			toastr.error('ERROR:', reason);
 		});
 	};
+
 }]);
 
 app.directive('editable',[function(){
-	var markup = "<div><label class='editInput' ng-if='!editMode'>{{editable.message}}</label><input type='text' ng-model='editable.message' ng-if='editMode'></input></div>";
-
+	var markup =	'<div>' +
+					'<label ng-if="!editMode">{{editable.message}}</label>' +
+					'<input class="editBox" type="text" ng-model="editable.message" ng-if="editMode"></input>' +
+					'<span ng-transclude></span>'+
+					'<div class="pull-right btn btn-info" ng-click="edit()"><i class="fa fa-pencil"></i></div>' +
+					'</div>';
 	return {
 		scope: {
 			editable : '='
 		},
+		transclude : true,
 		template: markup,
 		restrict: 'A',
 		controller : ['$scope', 'Mongo', function($scope, Mongo) {
@@ -123,31 +126,35 @@ app.directive('editable',[function(){
 			$scope.setEditMode = function() {
 				$scope.editMode =! $scope.editMode;
 			};
-			$scope.updateDb = function(id, data) {
+			$scope.updateItem = function(id, data) {
 				var params = {message: data, id: id};
 				Mongo.update(params).then(function(results) {
-					toastr.clear();
 					toastr.success('UPDATED: ' + $scope.lastText + ' to ' + $scope.editable.message);
 					$scope.lastText = $scope.editable.message;
 				}, function (reason) {
 					toastr.error('ERROR:', reason);
 				});
 			};
+
+			$scope.edit = function() {
+				$scope.$broadcast('edit');
+
+			};
 		}],
 		link: function(scope, element, attrs) {
-			element.on('dblclick', function() {
-				scope.$apply(function() {
-					scope.setEditMode();
-				});
-				scope.$apply(function() {
-					element.find('input').focus();
-				});
+			
+			scope.$on('edit', function() {
+				scope.setEditMode();
+				setTimeout( function() {
+					$('.editBox').focus();
+				}, 10);
 			});
+			
 			element.on('focusout', function() {
 				scope.$apply(function() {
 					scope.setEditMode();
 					if (scope.lastText !== scope.editable.message) {
-						scope.updateDb(scope.editable._id, scope.editable.message);
+						scope.updateItem(scope.editable._id, scope.editable.message);
 					}
 				});
 			});
