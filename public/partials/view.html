@@ -3,13 +3,10 @@
 <div class='output'>
 	<table class="table table-striped">
 		<tr ng-repeat='item in items'>
-			<td class='editInput' editable='item'></td>
-			<td align='right'><div class='btn btn-danger' ng-click='remove($index)'><i class="fa fa-times"></i></div></td>
+			<td editable='item'>
+				<div class='pull-right btn btn-danger' ng-click='remove($index)'><i class='fa fa-times'></i></div>
+			</td>
 		</tr>
 	</table>
-	<br />
-	<strong>
-		<i class="fa fa-2x fa-info-circle"></i> double-click to edit
-	</strong>
 </div>
 
