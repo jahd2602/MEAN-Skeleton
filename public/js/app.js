@@ -105,7 +105,7 @@ app.controller('ViewCtrl',['$scope', 'Mongo', function($scope, Mongo){
 
 }]);
 
-app.directive('editable',[function(){
+app.directive('editable',['$timeout', function($timeout){
 	var markup =	'<div>' +
 					'<label ng-if="!editMode">{{editable.message}}</label>' +
 					'<input class="editBox" type="text" ng-model="editable.message" ng-if="editMode"></input>' +
@@ -138,24 +138,34 @@ app.directive('editable',[function(){
 
 			$scope.edit = function() {
 				$scope.$broadcast('edit');
-
 			};
 		}],
 		link: function(scope, element, attrs) {
 			
 			scope.$on('edit', function() {
 				scope.setEditMode();
-				setTimeout( function() {
+				$timeout(function() {
 					$('.editBox').focus();
-				}, 10);
+				});
 			});
 			
+			element.on('keypress', function(e) {
+				if(e.keyCode==13 && scope.editMode){
+					$timeout(function() {	
+						scope.setEditMode();
+						element.trigger('focusout');
+					});
+				}
+			});
+
 			element.on('focusout', function() {
-				scope.$apply(function() {
-					scope.setEditMode();
-					if (scope.lastText !== scope.editable.message) {
-						scope.updateItem(scope.editable._id, scope.editable.message);
-					}
+				$timeout(function() {
+					scope.$apply(function() {
+						scope.setEditMode();
+						if (scope.lastText !== scope.editable.message) {
+							scope.updateItem(scope.editable._id, scope.editable.message);
+						}
+					});
 				});
 			});
 		}
