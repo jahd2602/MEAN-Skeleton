@@ -1,6 +1,6 @@
 <h1>Partial - add</h1>
-<input type='text' ng-model='test' ng-click='uploaded = false'/>
-<br /><br />
-<div ng-show='test'>
-		<button class='btn btn-success' ng-click='save()'>Add <u>{{test}}</u></button>
-</div>
+<br />
+<form  ng-submit='save()'>
+	<input type='text' ng-model='test' ng-click='uploaded = false' Required/>
+	<button class='btn btn-success' type="submit"><i class='fa fa-plus'></i></button>
+</form>

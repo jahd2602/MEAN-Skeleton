@@ -1,6 +1,6 @@
 {
   "name": "meanit",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "simple MEAN stack skeleton",
   "main": "server.js",
   "scripts": {
@@ -14,7 +14,7 @@
     "url": "https://github.com/andrewdamelio/MEAN-Skeleton"
   },
   "bugs": "https://github.com/andrewdamelio/MEAN-Skeleton/issues",
-  "keywords" : [
+  "keywords": [
     "mean",
     "mean stack",
     "angular",
@@ -33,7 +33,7 @@
     "body-parser": "^1.2.2",
     "mongoose": "^3.8.11",
     "colors": "^0.6.2"
-  },  
+  },
   "devDependencies": {
     "gulp": "^3.6.2",
     "gulp-rename": "^1.2.0",
