@@ -145,27 +145,24 @@ app.directive('editable',['$timeout', function($timeout){
 			scope.$on('edit', function() {
 				scope.setEditMode();
 				$timeout(function() {
-					$('.editBox').focus();
+					element.find('.editBox').focus();
 				});
 			});
 			
 			element.on('keypress', function(e) {
-				if(e.keyCode==13 && scope.editMode){
+				if(e.keyCode === 13){
 					$timeout(function() {	
-						scope.setEditMode();
-						element.trigger('focusout');
+						element.find('.editBox').blur();
 					});
 				}
 			});
 
 			element.on('focusout', function() {
 				$timeout(function() {
-					scope.$apply(function() {
-						scope.setEditMode();
-						if (scope.lastText !== scope.editable.message) {
-							scope.updateItem(scope.editable._id, scope.editable.message);
-						}
-					});
+					scope.setEditMode();
+					if (scope.lastText !== scope.editable.message) {
+						scope.updateItem(scope.editable._id, scope.editable.message);
+					}
 				});
 			});
 		}
