@@ -110,7 +110,8 @@ app.directive('editable',['$timeout', function($timeout){
 					'<label ng-if="!editMode">{{editable.message}}</label>' +
 					'<input class="editBox" type="text" ng-model="editable.message" ng-if="editMode"></input>' +
 					'<span ng-transclude></span>'+
-					'<div class="pull-right btn btn-info" ng-click="edit()"><i class="fa fa-pencil"></i></div>' +
+					'<div ng-if="!editMode" class="pull-right btn btn-info" ng-click="edit()"><i class="fa fa-pencil"></i></div>' +
+					'<div ng-if="editMode" class="pull-right btn btn-info" ng-click="save()"><i class="fa fa-save"></i></div>' +
 					'</div>';
 	return {
 		scope: {
@@ -126,11 +127,12 @@ app.directive('editable',['$timeout', function($timeout){
 			$scope.setEditMode = function() {
 				$scope.editMode =! $scope.editMode;
 			};
+			
 			$scope.updateItem = function(id, data) {
 				var params = {message: data, id: id};
 				Mongo.update(params).then(function(results) {
-					toastr.success('UPDATED: ' + $scope.lastText + ' to ' + $scope.editable.message);
-					$scope.lastText = $scope.editable.message;
+					toastr.success('UPDATED: ' + $scope.lastText + ' to ' + results.message);
+					$scope.lastText = results.message;
 				}, function (reason) {
 					toastr.error('ERROR:', reason);
 				});
@@ -139,6 +141,10 @@ app.directive('editable',['$timeout', function($timeout){
 			$scope.edit = function() {
 				$scope.$broadcast('edit');
 			};
+
+			$scope.save = function() {
+				$scope.$broadcast('save');
+			};			
 		}],
 		link: function(scope, element, attrs) {
 			
@@ -147,6 +153,10 @@ app.directive('editable',['$timeout', function($timeout){
 				$timeout(function() {
 					element.find('.editBox').focus();
 				});
+			});
+			
+			scope.$on('save', function() {
+				scope.setEditMode();			
 			});
 			
 			element.on('keypress', function(e) {
