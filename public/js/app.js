@@ -85,7 +85,7 @@ app.controller('AddCtrl',['$scope', 'Mongo', function($scope, Mongo){
 				$scope.items.push(results);
 				toastr.success('ADDED: ' + results.message);
 			}, function (reason) {
-				toastr.error('ERROR:', reason);
+				console.log('ERROR:', reason);
 			});
 		}
 	};
@@ -99,7 +99,7 @@ app.controller('ViewCtrl',['$scope', 'Mongo', function($scope, Mongo){
 		Mongo.remove(id).then(function(results) {
 			toastr.success('DELETED: '+ item);
 		}, function (reason) {
-			toastr.error('ERROR:', reason);
+			console.log('ERROR:', reason);
 		});
 	};
 
@@ -111,7 +111,7 @@ app.directive('editable',['$timeout', function($timeout){
 					'<input class="editBox" type="text" ng-model="editable.message" ng-if="editMode"></input>' +
 					'<span ng-transclude></span>'+
 					'<div ng-if="!editMode" class="pull-right btn btn-info" ng-click="edit()"><i class="fa fa-pencil"></i></div>' +
-					'<div ng-if="editMode" class="pull-right btn btn-info" ng-click="save()"><i class="fa fa-save"></i></div>' +
+					'<div ng-if="editMode" class="pull-right btn btn-info" ><i class="fa fa-save"></i></div>' +
 					'</div>';
 	return {
 		scope: {
@@ -124,17 +124,12 @@ app.directive('editable',['$timeout', function($timeout){
 			$scope.editMode = false;
 			$scope.lastText = $scope.editable.message;
 
-			$scope.setEditMode = function() {
-				$scope.editMode =! $scope.editMode;
-			};
-			
 			$scope.updateItem = function(id, data) {
 				var params = {message: data, id: id};
 				Mongo.update(params).then(function(results) {
-					toastr.success('UPDATED: ' + $scope.lastText + ' to ' + results.message);
 					$scope.lastText = results.message;
 				}, function (reason) {
-					toastr.error('ERROR:', reason);
+					console.log('ERROR:', reason);
 				});
 			};
 
@@ -142,23 +137,17 @@ app.directive('editable',['$timeout', function($timeout){
 				$scope.$broadcast('edit');
 			};
 
-			$scope.save = function() {
-				$scope.$broadcast('save');
-			};			
 		}],
 		link: function(scope, element, attrs) {
 			
 			scope.$on('edit', function() {
-				scope.setEditMode();
+				scope.editMode = true;
 				$timeout(function() {
 					element.find('.editBox').focus();
 				});
 			});
-			
-			scope.$on('save', function() {
-				scope.setEditMode();			
-			});
-			
+
+
 			element.on('keypress', function(e) {
 				if(e.keyCode === 13){
 					$timeout(function() {	
@@ -169,7 +158,7 @@ app.directive('editable',['$timeout', function($timeout){
 
 			element.on('focusout', function() {
 				$timeout(function() {
-					scope.setEditMode();
+					scope.editMode = false;
 					if (scope.lastText !== scope.editable.message) {
 						scope.updateItem(scope.editable._id, scope.editable.message);
 					}
