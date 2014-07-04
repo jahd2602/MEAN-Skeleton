@@ -92,16 +92,9 @@ app.controller('AddCtrl',['$scope', 'Mongo', function($scope, Mongo){
 }]);
 
 app.controller('ViewCtrl',['$scope', 'Mongo', function($scope, Mongo){
-	$scope.remove = function(index) {
-		var id = $scope.items[index]._id;
-		var item = $scope.items[index].message;
+	$scope.$on('remove', function(e, index) {
 		$scope.items.splice(index, 1);
-		Mongo.remove(id).then(function(results) {
-			toastr.success('DELETED: '+ item);
-		}, function (reason) {
-			console.log('ERROR:', reason);
-		});
-	};
+	});
 
 }]);
 
@@ -109,13 +102,14 @@ app.directive('editable',['$timeout', function($timeout){
 	var markup =	'<div>' +
 					'<label ng-if="!editMode">{{editable.message}}</label>' +
 					'<input class="editBox" type="text" ng-model="editable.message" ng-if="editMode"></input>' +
-					'<span ng-transclude></span>'+
-					'<div ng-if="!editMode" class="pull-right btn btn-info" ng-click="edit()"><i class="fa fa-pencil"></i></div>' +
+					'<div class="pull-right btn btn-danger" ng-click="removeItem()"><i class="fa fa-times"></i></div>' +
+					'<div ng-if="!editMode" class="pull-right btn btn-info" ng-click="editItem()"><i class="fa fa-pencil"></i></div>' +
 					'<div ng-if="editMode" class="pull-right btn btn-info" ><i class="fa fa-save"></i></div>' +
 					'</div>';
 	return {
 		scope: {
-			editable : '='
+			editable : '=',
+			index : '@'
 		},
 		transclude : true,
 		template: markup,
@@ -133,7 +127,16 @@ app.directive('editable',['$timeout', function($timeout){
 				});
 			};
 
-			$scope.edit = function() {
+			$scope.removeItem = function() {
+				Mongo.remove($scope.editable._id).then(function(results) {
+					toastr.error('DELETED: ' +$scope.editable.message);
+					$scope.$emit('remove', $scope.index);
+				}, function (reason) {
+					console.log('ERROR:', reason);
+				});
+			};
+
+			$scope.editItem = function() {
 				$scope.$broadcast('edit');
 			};
 

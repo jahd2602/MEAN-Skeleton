@@ -3,9 +3,7 @@
 <div class='output'>
 	<table class="table table-striped">
 		<tr ng-repeat='item in items'>
-			<td editable='item'>
-				<div class='pull-right btn btn-danger' ng-click='remove($index)'><i class='fa fa-times'></i></div>
-			</td>
+			<td editable='item' index='{{$index}}'></td>
 		</tr>
 	</table>
 </div>
