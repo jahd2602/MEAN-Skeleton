@@ -1,6 +1,10 @@
 {
   "name": "meanit",
+<<<<<<< HEAD
   "version": "1.7.1",
+=======
+  "version": "1.6.1",
+>>>>>>> 66bcb0577e79de2268f934244843b80f23d40d78
   "authors": [
     "Andrew D'Amelio <dev@andrewdamel.io>"
   ],
