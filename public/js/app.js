@@ -74,14 +74,11 @@ app.controller('MainCtrl', ['$scope','Mongo', function ($scope, Mongo) {
 }]);
 
 app.controller('AddCtrl',['$scope', 'Mongo', function($scope, Mongo){
-	$scope.uploaded = false;
-
 	$scope.save = function() {
 		if ($scope.test) {
 			var params = {message: $scope.test};
 			$scope.test='';
 			Mongo.save(params).then(function(results) {
-				$scope.uploaded = true;
 				$scope.items.push(results);
 				toastr.success('ADDED: ' + results.message);
 			}, function (reason) {
