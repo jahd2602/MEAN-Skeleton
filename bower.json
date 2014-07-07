@@ -1,0 +1,20 @@
+{
+  "name": "meanit",
+  "version": "1.7.1",
+  "authors": [
+    "Andrew D'Amelio <dev@andrewdamel.io>"
+  ],
+  "description": "Mean Skeleton",
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "toastr": "~2.0.3",
+    "angular": "~1.2.16",
+    "angular-resource": "~1.2.16",
+    "angular-route": "~1.2.16",
+    "angular-animate": "~1.2.16"
+  }
+}
