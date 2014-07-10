@@ -1,21 +1,14 @@
 extends ../includes/layout
 
 block main-content
-	section
-		div
-			div(class='col-sm-1' style='margin:95px')
-				center
-					img(src='assets/mean.png')
-			div(class='col-sm-8')
-				div(ng-controller='MainCtrl')
-					h2.jumbotron 
-						a(href='/') Main
-						| &nbsp;|&nbsp;
-						a(href='#/add') Add
-						| &nbsp;|&nbsp;
-						a(href='#/view') View
-						div(ng-view)
-						hr
-					h3
-						| &nbsp;
-						a(href='/api') JSON API
+	section( ng-controller='MainCtrl')
+		div(class='col-sm-1' style='margin:95px;margin-top:20px;margin-bottom:20px')
+			center
+				img(src='assets/mean.png')
+		div(class='col-sm-8' )
+			h2.jumbotron
+				div(ng-view)
+			div
+				| &nbsp;
+				a(href='/api') JSON API
+				

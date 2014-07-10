@@ -28,7 +28,7 @@ app.factory('Mongo', function($http, $q) {
 
 	var query = function() {
 		var deferredQuery = $q.defer();
-		$http({method: 'get', url: '/api'}).success(deferredQuery.resolve).error(deferredQuery.reject);
+		$http({method: 'get', url: '/api?' + (new Date()).getTime()}).success(deferredQuery.resolve).error(deferredQuery.reject);
 		return deferredQuery.promise;
 	};
 
@@ -58,18 +58,17 @@ app.factory('Mongo', function($http, $q) {
 	};
 });
 
+
 app.controller('MainCtrl', ['$scope','Mongo', function ($scope, Mongo) {
-	$scope.myVar = 'angular is working!';
-
-	$scope.query = function() {
+		
+		
+		$scope.myVar = 'angular is working!';
 		Mongo.query().then(function (result) {
-			$scope.items = (result !== 'null') ? result : {};
+            	$scope.items = (result !== 'null') ? result : {};
 		}, function (reason) {
-			console.log('ERROR:', reason);
+			toastr.error('ERROR:', reason);
 		});
-	};
-
-	$scope.query();
+	
 	
 }]);
 
@@ -82,23 +81,25 @@ app.controller('AddCtrl',['$scope', 'Mongo', function($scope, Mongo){
 				$scope.items.push(results);
 				toastr.success('ADDED: ' + results.message);
 			}, function (reason) {
-				console.log('ERROR:', reason);
+				toastr.error('ERROR:', reason);
 			});
 		}
 	};
 }]);
 
-app.controller('ViewCtrl',['$scope', 'Mongo', function($scope, Mongo){
+app.controller('ViewCtrl',['$scope', 'Mongo',  function($scope, Mongo){
+
 	$scope.$on('remove', function(e, index) {
 		$scope.items.splice(index, 1);
 	});
 
 }]);
 
+
 app.directive('editable',['$timeout', function($timeout){
 	var markup =	'<div>' +
-					'<label ng-if="!editMode">{{editable.message}}</label>' +
-					'<input class="editBox" type="text" ng-model="editable.message" ng-if="editMode"></input>' +
+					'<label ng-click="editItem()" class="message" ng-if="!editMode">{{editable.message}}</label>' +
+					'<input class="editBox" type="text" ng-model="editable.message" ng-keydown="keypress($event)" ng-if="editMode"></input>' +
 					'<div class="pull-right btn btn-danger" ng-click="removeItem()"><i class="fa fa-times"></i></div>' +
 					'<div ng-if="!editMode" class="pull-right btn btn-info" ng-click="editItem()"><i class="fa fa-pencil"></i></div>' +
 					'<div ng-if="editMode" class="pull-right btn btn-info" ><i class="fa fa-save"></i></div>' +
@@ -120,7 +121,7 @@ app.directive('editable',['$timeout', function($timeout){
 				Mongo.update(params).then(function(results) {
 					$scope.lastText = results.message;
 				}, function (reason) {
-					console.log('ERROR:', reason);
+					toastr.error('ERROR:', reason);
 				});
 			};
 
@@ -129,12 +130,17 @@ app.directive('editable',['$timeout', function($timeout){
 					toastr.error('DELETED: ' +$scope.editable.message);
 					$scope.$emit('remove', $scope.index);
 				}, function (reason) {
-					console.log('ERROR:', reason);
+					toastr.error('ERROR:', reason);
 				});
 			};
 
 			$scope.editItem = function() {
 				$scope.$broadcast('edit');
+			};
+
+			$scope.keypress = function(e) {
+				if(e.keyCode != 13) return;
+				$scope.$broadcast('blur');
 			};
 
 		}],
@@ -147,13 +153,10 @@ app.directive('editable',['$timeout', function($timeout){
 				});
 			});
 
-
-			element.on('keypress', function(e) {
-				if(e.keyCode === 13){
-					$timeout(function() {	
-						element.find('.editBox').blur();
-					});
-				}
+			scope.$on('blur', function() {
+				$timeout(function() {	
+					element.find('.editBox').blur();
+				});		
 			});
 
 			element.on('focusout', function() {
