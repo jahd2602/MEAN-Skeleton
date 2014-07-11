@@ -1,5 +1,4 @@
  .output {
- 	font-size: 20px; 
  	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -21,9 +20,6 @@
 	
 }
 
-.addItem {
-	width:250px;
-}
 
 /* CREDIT TO http://scotch.io/ */
 /* basic styling for entering and leaving */

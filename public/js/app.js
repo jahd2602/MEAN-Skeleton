@@ -10,13 +10,9 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
 			templateUrl: '/partials/main.html', 
 			controller:  'MainCtrl'	
 		})
-		.when('/add', {
-			templateUrl: '/partials/add.html', 
-			controller:  'AddCtrl'	
-		})		
-		.when('/view', {
-			templateUrl: '/partials/view.html', 
-			controller:  'ViewCtrl'	
+		.when('/edit', {
+			templateUrl: '/partials/edit.html', 
+			controller:  'EditCtrl'	
 		})
 		.otherwise({
 			redirectTo: '/'
@@ -70,22 +66,8 @@ app.controller('MainCtrl', ['$scope','Mongo', function ($scope, Mongo) {
 	
 	
 }]);
-
-app.controller('AddCtrl',['$scope', 'Mongo', function($scope, Mongo){
-	$scope.save = function() {
-		if ($scope.test) {
-			var params = {message: $scope.test};
-			$scope.test='';
-			Mongo.save(params).then(function(results) {
-				toastr.success('ADDED: ' + results.message);
-			}, function (reason) {
-				toastr.error('ERROR:', reason);
-			});
-		}
-	};
-}]);
-
-app.controller('ViewCtrl',['$scope', 'Mongo',  function($scope, Mongo){
+ 
+app.controller('EditCtrl',['$scope', 'Mongo',  function($scope, Mongo){
 
 	$scope.$on('remove', function(e, index) {
 		$scope.items.splice(index, 1);
@@ -97,6 +79,22 @@ app.controller('ViewCtrl',['$scope', 'Mongo',  function($scope, Mongo){
 		toastr.error('ERROR:', reason);
 	});
 	
+	$scope.save = function() {
+		if ($scope.test) {
+			var params = {message: $scope.test};
+			$scope.test='';
+			Mongo.save(params).then(function(results) {
+				toastr.success('ADDED: ' + results.message);
+					Mongo.query().then(function (result) {
+		$scope.items = (result !== 'null') ? result : {};
+	}, function (reason) {
+		toastr.error('ERROR:', reason);
+	});
+			}, function (reason) {
+				toastr.error('ERROR:', reason);
+			});
+		}
+	};	
 }]);
 
 

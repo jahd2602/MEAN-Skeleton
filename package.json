@@ -1,6 +1,6 @@
 {
   "name": "meanit",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "simple MEAN stack skeleton",
   "main": "server.js",
   "scripts": {
