@@ -61,7 +61,6 @@ app.factory('Mongo', function($http, $q) {
 
 app.controller('MainCtrl', ['$scope','Mongo', function ($scope, Mongo) {
 		
-		
 		$scope.myVar = 'angular is working!';
 		Mongo.query().then(function (result) {
             	$scope.items = (result !== 'null') ? result : {};
@@ -78,7 +77,6 @@ app.controller('AddCtrl',['$scope', 'Mongo', function($scope, Mongo){
 			var params = {message: $scope.test};
 			$scope.test='';
 			Mongo.save(params).then(function(results) {
-				$scope.items.push(results);
 				toastr.success('ADDED: ' + results.message);
 			}, function (reason) {
 				toastr.error('ERROR:', reason);
@@ -93,6 +91,12 @@ app.controller('ViewCtrl',['$scope', 'Mongo',  function($scope, Mongo){
 		$scope.items.splice(index, 1);
 	});
 
+	Mongo.query().then(function (result) {
+		$scope.items = (result !== 'null') ? result : {};
+	}, function (reason) {
+		toastr.error('ERROR:', reason);
+	});
+	
 }]);
 
 
