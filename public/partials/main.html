@@ -1,4 +1,8 @@
-<a href='/'><u>Main</u></a> | <a href='#/add'>Add</a> | <a href='#/view'>View</a><br /><br />
+<ul class="nav nav-pills">
+    <li ng-class="{'active':true}"><a href='/'>Main</a></li>
+    <li ng-class="{'active':false}"><a href='#/edit'>Edit</a></li>
+</ul>
+<br /><br />
 MongoDb online - {{items.length}} records<br />
 {{myVar}}<br />
 So is <i class="fa fa-spinner fa-spin"></i> font-awesome.

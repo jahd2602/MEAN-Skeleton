@@ -29,22 +29,22 @@
     position:absolute; 
     left:30px; 
     right:30px;
-    transition:0.5s all ease;
-    -moz-transition:0.5s all ease;
-    -webkit-transition:0.5s all ease; 
+    transition:0.4 all ease;
+    -moz-transition:0.4s all ease;
+    -webkit-transition:0.4s all ease; 
 }
     
 /* enter animation */
 #app.ng-enter {  
-    -webkit-animation:slideInRight 0.5s both ease;
-    -moz-animation:slideInRight 0.5s both ease;
-    animation:slideInRight 0.5s both ease; 
+    -webkit-animation:slideInRight 0.4s both ease;
+    -moz-animation:slideInRight 0.4s both ease;
+    animation:slideInRight 0.4s both ease; 
 }
 /* leave animation */
 #app.ng-leave {
-    -webkit-animation:slideOutLeft 0.5s both ease;
-    -moz-animation:slideOutLeft 0.5s both ease;
-    animation:slideOutLeft 0.5s both ease;   
+    -webkit-animation:slideOutLeft 0.4s both ease;
+    -moz-animation:slideOutLeft 0.4s both ease;
+    animation:slideOutLeft 0.4s both ease;   
 }
 
 /* slide out to the left */

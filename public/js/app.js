@@ -98,6 +98,8 @@ app.controller('EditCtrl',['$scope', 'Mongo',  function($scope, Mongo){
 }]);
 
 
+
+
 app.directive('editable',['$timeout', function($timeout){
 	var markup =	'<div>' +
 					'<label ng-click="editItem()" class="message" ng-if="!editMode">{{editable.message}}</label>' +
