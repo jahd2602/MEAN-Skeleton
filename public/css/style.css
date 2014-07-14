@@ -24,30 +24,35 @@
 /* CREDIT TO http://scotch.io/ */
 /* basic styling for entering and leaving */
 /* left and right added to ensure full width */
-#app.ng-enter,
-#app.ng-leave { 
-    position:absolute; 
-    left:30px; 
-    right:30px;
-    transition:0.4 all ease;
-    -moz-transition:0.4s all ease;
-    -webkit-transition:0.4s all ease; 
-}
-    
-/* enter animation */
-#app.ng-enter {  
-    -webkit-animation:slideInRight 0.4s both ease;
-    -moz-animation:slideInRight 0.4s both ease;
-    animation:slideInRight 0.4s both ease; 
-}
-/* leave animation */
-#app.ng-leave {
-    -webkit-animation:slideOutLeft 0.4s both ease;
-    -moz-animation:slideOutLeft 0.4s both ease;
-    animation:slideOutLeft 0.4s both ease;   
-}
+@media (min-width: 650px) {
+  
+    #app.ng-enter,
+    #app.ng-leave { 
+        position:absolute; 
+        left:30px; 
+        right:30px;
+        transition:0.4 all ease;
+        -moz-transition:0.4s all ease;
+        -webkit-transition:0.4s all ease; 
+    }
+      
+     
+    /* enter animation */
+    #app.ng-enter {  
+        -webkit-animation:slideInRight 0.4s both ease;
+        -moz-animation:slideInRight 0.4s both ease;
+        animation:slideInRight 0.4s both ease; 
+    }
+    /* leave animation */
+    #app.ng-leave {
+        -webkit-animation:slideOutLeft 0.4s both ease;
+        -moz-animation:slideOutLeft 0.4s both ease;
+        animation:slideOutLeft 0.4s both ease;   
+    }
 
-/* slide out to the left */
+} 
+
+ /* slide out to the left */
 @keyframes slideOutLeft {
     to      { transform: translateX(-200%); }
 }
@@ -70,4 +75,4 @@
 @-webkit-keyframes slideInRight {
     from    { -webkit-transform:translateX(200%); }
     to      { -webkit-transform: translateX(0); }
-}
+} 
