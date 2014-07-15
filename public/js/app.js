@@ -104,10 +104,11 @@ app.directive('editable',['$timeout', function($timeout){
 	var markup =	'<div>' +
 					'<label ng-click="editItem()" class="message" ng-if="!editMode">{{editable.message}}</label>' +
 					'<input class="editBox" type="text" ng-model="editable.message" ng-keydown="keypress($event)" ng-if="editMode"></input>' +
-					'<div class="pull-right btn btn-danger" ng-click="removeItem()"><i class="fa fa-times"></i></div>' +
-					'<div ng-if="!editMode" class="pull-right btn btn-info" ng-click="editItem()"><i class="fa fa-pencil"></i></div>' +
-					'<div ng-if="editMode" class="pull-right btn btn-info" ><i class="fa fa-save"></i></div>' +
-					'</div>';
+					'<div class="pull-right">'+
+					'<div ng-if="!editMode" class="btn btn-info" ng-click="editItem()"><i class="fa fa-pencil"></i></div>' +
+					'<div ng-if="editMode" class="btn btn-info" ><i class="fa fa-save"></i></div>' +
+					'<div class="btn btn-danger" ng-click="removeItem()"><i class="fa fa-times"></i></div>' +
+					'</div></div>';
 	return {
 		scope: {
 			editable : '=',
