@@ -144,7 +144,7 @@ app.directive('editable',['$timeout', function($timeout){
 			};
 
 			$scope.keypress = function(e) {
-				if(e.keyCode != 13) return;
+				if(e.keyCode !== 13)  {return;}
 				$scope.$broadcast('blur');
 			};
 

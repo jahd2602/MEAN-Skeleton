@@ -16,45 +16,68 @@
 }
 
 .main {
-    padding:50px;
+    padding:10px;
     border:1px solid black;
-    border-radius: 40px;
+    border-radius: 10px;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.4);
     text-align: center;
+    width:80%;
+
 }
 
 .logo {
     margin-top:20px;
     margin-bottom:20px;
-    text-align: center;
 }
 
-.nav, .message, .editBox, .main {
-    font-size:16px;
-    font-weight: normal;
+@media (max-width: 400px) {
+    .nav, .message, .editBox, .main {
+        font-size:14px;
+        font-weight: normal;
+    }
+    .main {
+        width:80%;
+        margin:auto;
+    }
+    .logo {
+        text-align:center;
+    }
 }
 
-@media (min-width: 580px) {
+@media (min-width: 401px) and (max-width: 990px) {
     .nav, .message, .editBox, .main {
         font-size:18px;
+        font-weight: normal;
+    }
+
+    .main {
+         width:100%;
+         margin:auto;
+         padding:15px;
     }
 
     .logo {
-        margin-left:95px;
+        text-align:center;
+    }
+
+}
+
+@media (min-width: 991px) {
+    .nav, .message, .editBox, .main {
+        font-size:20px;
+        font-weight: normal;
+    }
+
+    .main {
+         width:350px;
+         padding:50px;
+    }
+
+    .logo {
         margin-right:95px;
     }
 }
 
-@media (min-width: 992px) {
-    .nav, .message, .editBox {
-        font-size:20px;
-    }
-}
-
-@media (min-width: 1350px) {
-    .main {
-        font-size:24px;
-    }
-}
 
 /* CREDIT TO http://scotch.io/ */
 /* basic styling for entering and leaving */
