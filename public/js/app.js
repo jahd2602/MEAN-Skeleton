@@ -6,7 +6,7 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
 	
 	//$locationProvider.html5Mode(true);			// html5 mode optional
 	$routeProvider
-		.when('/', {
+		.when('/main', {
 			templateUrl: '/partials/main.html', 
 			controller:  'MainCtrl'	
 		})
@@ -15,7 +15,7 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
 			controller:  'EditCtrl'	
 		})
 		.otherwise({
-			redirectTo: '/'
+			redirectTo: '/main'
 		});
 
 }]);
@@ -99,11 +99,10 @@ app.controller('EditCtrl',['$scope', 'Mongo',  function($scope, Mongo){
 
 
 
-
 app.directive('editable',['$timeout', function($timeout){
 	var markup =	'<div>' +
 					'<label ng-click="editItem()" class="message" ng-if="!editMode">{{editable.message}}</label>' +
-					'<input class="editBox" type="text" ng-model="editable.message" ng-keydown="keypress($event)" ng-if="editMode"></input>' +
+					'<input class="editBox" type="text" ng-class="{\'active\':editMode}" ng-model="editable.message" ng-keydown="keypress($event)" ng-if="editMode"></input>' +
 					'<div class="pull-right">'+
 					'<div ng-if="!editMode" class="btn btn-info" ng-click="editItem()"><i class="fa fa-pencil"></i></div>' +
 					'<div ng-if="editMode" class="btn btn-info" ><i class="fa fa-save"></i></div>' +
@@ -137,7 +136,7 @@ app.directive('editable',['$timeout', function($timeout){
 				}, function (reason) {
 					toastr.error('ERROR:', reason);
 				});
-			};
+			}; 
 
 			$scope.editItem = function() {
 				$scope.$broadcast('edit');
@@ -175,3 +174,19 @@ app.directive('editable',['$timeout', function($timeout){
 		}
   	};
 }]);
+
+
+app.animation('.editBox', function ($window) {
+	return {
+		addClass: function(element, className, done) {
+			if (className == 'active' && $window.innerWidth > 991) {
+				TweenMax.to(element, .2, {skewX:360, onComplete:done})
+			}
+			else {
+				done();
+			}
+		}
+	}
+});
+
+
