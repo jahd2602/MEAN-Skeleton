@@ -19,6 +19,3 @@ npm install
 ```
 npm start
 ```
-
-<br />
-<a href='https://www.npmjs.org/package/meanit'><img src='https://www.npmjs.org/static/img/npm.png' height='25px' /></a>
