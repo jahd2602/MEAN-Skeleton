@@ -28,28 +28,38 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
 
 app.factory('Mongo', function($http, $q) {
 
-	var query = function() {
-		var deferredQuery = $q.defer();
-		$http({method: 'get', url: '/api?' + (new Date()).getTime()}).success(deferredQuery.resolve).error(deferredQuery.reject);
-		return deferredQuery.promise;
-	};
+	var logAndRethrow = function (error) {
+    	console.log('mongo', error);
+    	error ='Mongo connection failed';
+    	throw error;      
+  	};
+
+  	var query = function() {
+    	return $http({method: 'get', url: '/api?' + (new Date()).getTime()}).then(function(res) {
+        	return res.data;
+    	})
+    	.then(null, logAndRethrow);
+  	};
 
 	var save = function(params) {
-		var deferredSave = $q.defer();
-		$http.post('/api', params).success(deferredSave.resolve).error(deferredSave.reject);
-		return deferredSave.promise;
+		return $http.post('/api', params).then(function(res) {
+    	    return res.data;
+    	})
+    	.then(null, logAndRethrow);
 	};
 
 	var remove = function(id) {
-		var deferredRemove = $q.defer();
-		$http.delete('/api/' + id).success(deferredRemove.resolve).error(deferredRemove.reject);
-		return deferredRemove.promise;
+		return $http.delete('/api/' + id).then(function(res) {
+    	    return res.data;
+    	})
+    	.then(null, logAndRethrow);
 	};
 
 	var update = function(params) {
-		var deferredUpdate = $q.defer();
-		$http.put('/api/'+params.id, params).success(deferredUpdate.resolve).error(deferredUpdate.reject);
-		return deferredUpdate.promise;
+		return $http.put('/api/'+params.id, params).then(function(res) {
+    	    return res.data;
+    	})
+    	.then(null, logAndRethrow);
 	};
 	
 	return {
@@ -67,7 +77,7 @@ app.controller('MainCtrl', ['$scope','Mongo', function ($scope, Mongo) {
 		Mongo.query().then(function (result) {
             	$scope.items = (result !== 'null') ? result : {};
 		}, function (reason) {
-			toastr.error('ERROR:', reason);
+			toastr.error(reason);
 		});
 	
 	
@@ -79,30 +89,29 @@ app.controller('EditCtrl',['$scope', 'Mongo',  function($scope, Mongo){
 		$scope.items.splice(index, 1);
 	});
 
-	Mongo.query().then(function (result) {
-		$scope.items = (result !== 'null') ? result : {};
-	}, function (reason) {
-		toastr.error('ERROR:', reason);
-	});
+	$scope.query = function() {
+  		Mongo.query().then(function (result) {
+  			$scope.items = (result !== 'null') ? result : {};
+  		}, function (reason) {
+  			toastr.error(reason);
+  		});
+  	};
 	
 	$scope.save = function() {
 		if ($scope.test) {
 			var params = {message: $scope.test};
 			$scope.test='';
-			Mongo.save(params).then(function(results) {
-				toastr.success('ADDED: ' + results.message);
-					Mongo.query().then(function (result) {
-		$scope.items = (result !== 'null') ? result : {};
-	}, function (reason) {
-		toastr.error('ERROR:', reason);
-	});
+			Mongo.save(params).then(function (result) {
+				toastr.success('ADDED: ' + result.message);
+				$scope.items.push(result);
 			}, function (reason) {
-				toastr.error('ERROR:', reason);
+				toastr.error(reason);
 			});
 		}
 	};	
-}]);
 
+  	$scope.query();
+}]);
 
 
 app.directive('editable',['$timeout', function($timeout){
@@ -131,7 +140,7 @@ app.directive('editable',['$timeout', function($timeout){
 				Mongo.update(params).then(function(results) {
 					$scope.lastText = results.message;
 				}, function (reason) {
-					toastr.error('ERROR:', reason);
+					toastr.error(reason);
 				});
 			};
 
@@ -140,7 +149,7 @@ app.directive('editable',['$timeout', function($timeout){
 					toastr.error('DELETED: ' +$scope.editable.message);
 					$scope.$emit('remove', $scope.index);
 				}, function (reason) {
-					toastr.error('ERROR:', reason);
+					toastr.error(reason);
 				});
 			}; 
 
@@ -155,21 +164,21 @@ app.directive('editable',['$timeout', function($timeout){
 
 		}],
 		link: function(scope, element, attrs) {
-			
+			var ele = element[0];
 			scope.$on('edit', function() {
 				scope.editMode = true;
 				$timeout(function() {
-					$('.editBox').focus();
+					$(ele).find('.editBox').focus();
 				});
 			});
 
 			scope.$on('blur', function() {
 				$timeout(function() {	
-					$('.editBox').blur();
+					$(ele).find('.editBox').blur();
 				});		
 			});
 
-			element.on('focusout', function() {
+			$(ele).on('focusout', function() {
 				$timeout(function() {
 					scope.editMode = false;
 					if (scope.lastText !== scope.editable.message) {
