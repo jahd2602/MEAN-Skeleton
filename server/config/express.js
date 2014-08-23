@@ -16,5 +16,5 @@ module.exports = function(app, config) {
 	morgan('combined', {
 	  skip: function (req, res) { return res.statusCode < 400 }
 	})
-	app.use(express.static(config.rootPath + '/public'));
+	app.use(express.static(config.rootPath + '/dist'));
 };

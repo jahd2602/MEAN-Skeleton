@@ -1,6 +1,12 @@
 'use strict';
+var $ = require('jquery'),
+	angular = require('angular'),
+	ngRoute = require('angular-route'),
+	ngAnimate = require('angular-animate'),
+	toastr = require('toastr');
 
-var app = angular.module('app', ['ngResource', 'ngRoute', 'ngAnimate']);
+
+var app = angular.module('app', ['ngRoute', 'ngAnimate']);
 
 app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
 	
@@ -153,13 +159,13 @@ app.directive('editable',['$timeout', function($timeout){
 			scope.$on('edit', function() {
 				scope.editMode = true;
 				$timeout(function() {
-					element.find('.editBox').focus();
+					$('.editBox').focus();
 				});
 			});
 
 			scope.$on('blur', function() {
 				$timeout(function() {	
-					element.find('.editBox').blur();
+					$('.editBox').blur();
 				});		
 			});
 
@@ -178,15 +184,13 @@ app.directive('editable',['$timeout', function($timeout){
 
 app.animation('.editBox', function ($window) {
 	return {
-		addClass: function(element, className, done) {
-			if (className == 'active' && $window.innerWidth > 991) {
-				TweenMax.to(element, .2, {skewX:360, onComplete:done})
+		addClass: function(e, className, done) {
+			if (className === 'active' && $window.innerWidth > 991) {
+				TweenMax.to(e, 0.2, {skewX:360, onComplete:done});
 			}
 			else {
 				done();
 			}
 		}
-	}
+	};
 });
-
-
