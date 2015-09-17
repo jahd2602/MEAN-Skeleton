@@ -1,17 +1,16 @@
 var express = require('express'),
- 	mongoose = require('mongoose'),
-	colors = require('colors'); 
-
+    mongoose = require('mongoose'),
+    colors = require('colors');
 
 var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 var app = express();
 
 // Config Object
 var config = {
-	rootPath: __dirname,
-	//db : 'mongodb://test:test@ds053188.mongolab.com:53188/hello',
-	db : 'mongodb://localhost:27017/hello',
-	port : process.env.PORT || 3030
+    rootPath: __dirname,
+    //db : 'mongodb://test:test@ds053188.mongolab.com:53188/hello',
+    db: 'mongodb://localhost:27017/hello',
+    port: process.env.PORT || 3030
 }
 
 // EXPRESS setup
