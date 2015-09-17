@@ -9,7 +9,8 @@ var app = express();
 // Config Object
 var config = {
 	rootPath: __dirname,
-	db : 'mongodb://test:test@ds053188.mongolab.com:53188/hello',
+	//db : 'mongodb://test:test@ds053188.mongolab.com:53188/hello',
+	db : 'mongodb://localhost:27017/hello',
 	port : process.env.PORT || 3030
 }
 
