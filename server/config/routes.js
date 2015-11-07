@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 module.exports = function (app) {
-    var messageSchema = mongoose.Schema({message: String});
+    var messageSchema = mongoose.Schema({message: String, number: Number});
     var Message = mongoose.model('Message', messageSchema);
 
     // JSON API

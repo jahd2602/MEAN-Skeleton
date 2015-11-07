@@ -7,11 +7,11 @@ var app = express();
 
 // Config Object
 var config = {
-    rootPath: __dirname,
     //db : 'mongodb://test:test@ds053188.mongolab.com:53188/hello',
     db: 'mongodb://localhost:27017/hello',
+    rootPath: __dirname,
     port: process.env.PORT || 3030
-}
+};
 
 // EXPRESS setup
 require('./server/config/express')(app, config);

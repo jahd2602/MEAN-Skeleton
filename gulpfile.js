@@ -19,9 +19,7 @@ var gulp = require('gulp'),
 gulp.task('dev', ['clean'], function () {
     gulp.start(['views', 'images', 'styles', 'lint', 'browserify']);
     gulp.src('public/js/TweenMax.min.js')
-        .pipe(gulp.dest('dist/js/'))
-    gulp.src('public/favicon.ico')
-        .pipe(gulp.dest('dist/'))
+        .pipe(gulp.dest('dist/js/'));
     gulp.start('watch');
 });
 
